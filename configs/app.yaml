@@ -1,0 +1,7 @@
+chat_history_path: "chatbot_logs/"
+reload: true 
+chat_id: "001"
+chatbot_temperature: 0.2
+max_completion_tokens: 500
+max_context_length: 150
+tokenizer_type: ""
