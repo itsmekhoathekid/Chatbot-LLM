@@ -6,13 +6,13 @@
             "prefs": [],
             "constraints": []
         },
-        "key_facts": "In the ever-changing world, where innovation and progress intertwine, human ingenuity continues to shape our extraordinary journey from fire taming to space exploration, showcasing remarkable growth and adaptation. Discoveries, technology, and cultural exchanges have profoundly improved communication, education, and understanding among diverse communities. The Industrial Revolution revolutionized manufacturing, while the Information Age revolutionized information access, processing, and sharing. Renewable energy and sustainable practices work towards a greener future, addressing climate change and environmental preservation. Artificial intelligence and automation improve efficiency and open new opportunities, while maintaining a balance between progress and preserving our planet is crucial. Collaboration, diversity, and empathy ensure a bright future where innovation and sustainability coexist harmoniously for generations to come. ",
+        "key_facts": "interpreting human language for computers.\n\nNLP plays a significant role in enabling seamless communication between humans and machines, improving search capabilities, developing chatbots and virtual assistants, and understanding human sentiment and opinions. It combines techniques like NLG, NLU, and NLP to bridge the gap between human language and computer systems. ",
         "decisions": [],
         "open_questions": [],
         "todos": []
     },
     "message_range_summarized": {
         "from": 0,
-        "to": 0
+        "to": 2
     }
 }

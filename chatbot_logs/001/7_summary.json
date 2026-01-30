@@ -1,0 +1,18 @@
+{
+    "session_summary": {
+        "session_id": "001",
+        "summary_idx": 7,
+        "user_profile": {
+            "prefs": [],
+            "constraints": []
+        },
+        "key_facts": "The user commended the assistant for a good job, and the assistant expressed gratitude. They offered continued assistance and welcome further tasks or questions. They also mentioned they are an AI that is constantly evolving and appreciates feedback to improve their services for the user. ",
+        "decisions": [],
+        "open_questions": [],
+        "todos": []
+    },
+    "message_range_summarized": {
+        "from": 13,
+        "to": 13
+    }
+}

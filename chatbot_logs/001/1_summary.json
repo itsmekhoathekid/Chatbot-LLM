@@ -1,0 +1,18 @@
+{
+    "session_summary": {
+        "session_id": "001",
+        "summary_idx": 1,
+        "user_profile": {
+            "prefs": [],
+            "constraints": []
+        },
+        "key_facts": "The user expressed a positive sentiment with the word \"good.\" The assistant, also positive in nature, offers help and is designed to make the user's experience and day better by providing information and assistance on various topics and tasks. ",
+        "decisions": [],
+        "open_questions": [],
+        "todos": []
+    },
+    "message_range_summarized": {
+        "from": 0,
+        "to": 0
+    }
+}

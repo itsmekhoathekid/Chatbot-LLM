@@ -1,6 +1,7 @@
 # src/main.py
 from dotenv import load_dotenv
 from pathlib import Path
+import asyncio
 
 # load .env ở root project (chat-assistant-memory/.env)
 ROOT = Path(__file__).resolve().parents[1]
@@ -27,11 +28,12 @@ def parse_args():
 
 
 
+
 def main():
     args = parse_args()
     config = load_config(args.config) if args.config else None
     pipe = ChatPipeline(config)
-    pipe.infinite_chat()
+    asyncio.run(pipe.infinite_chat())  # <-- change here
 
 if __name__ == "__main__":
     main()

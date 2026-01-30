@@ -10,9 +10,11 @@ class Summarization:
         self.config = config
         self.prompt = Prompts.get_summarization_prompt
 
-    def summarize_session(self, chat_history: list, summary_idx) -> str:
+    def summarize_session(self, chat_window: list, summary_idx: int) -> str:
         # Placeholder for summarization logic
-        summary_prompt = self.prompt(chat_history)
+        start_idx = chat_window[0]['idx'] if chat_window else 0
+        end_idx = chat_window[-1]['idx'] if chat_window else 0
+        summary_prompt = self.prompt(chat_window)
                 
         summary = self.llm.chat(summary_prompt)
 
@@ -26,7 +28,7 @@ class Summarization:
                 "open_questions": [],
                 "todos": []
             },
-            "message_range_summarized": {"from": 0, "to": len(chat_history) - 1}
+            "message_range_summarized": {"from": start_idx, "to": end_idx}
         }
         os.makedirs(self.config["chat_history_path"], exist_ok=True)
         os.makedirs(os.path.join(self.config["chat_history_path"], f"{self.config['chat_id']}"), exist_ok=True)
