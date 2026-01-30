@@ -3,16 +3,23 @@
         "session_id": "001",
         "summary_idx": 0,
         "user_profile": {
-            "prefs": [],
-            "constraints": []
+            "constraints": [],
+            "prefs": []
         },
-        "key_facts": "interpreting human language for computers.\n\nNLP plays a significant role in enabling seamless communication between humans and machines, improving search capabilities, developing chatbots and virtual assistants, and understanding human sentiment and opinions. It combines techniques like NLG, NLU, and NLP to bridge the gap between human language and computer systems. ",
+        "key_facts": [
+            "Tokenization splits raw text into atomic units such as words, sub\u2011words, and punctuation",
+            "Part\u2011of\u2011Speech (POS) tagging assigns a grammatical category to each token",
+            "Morphological analysis/lemmatization reduces words to their base forms and captures inflectional features",
+            "Syntactic parsing builds a structural representation of sentence grammar as a parse tree or dependency graph",
+            "Classic NLP methods include rule\u2011based regex tokenizers, HMMs, Maximum Entropy models, Conditional Random Fields, PCFGs, and graph\u2011based parsers",
+            "Modern deep\u2011learning approaches use sub\u2011word tokenizers (BPE, WordPiece, SentencePiece) and transformer models such as BERT fine\u2011tuned for POS tagging, dependency parsing, and other tasks"
+        ],
         "decisions": [],
         "open_questions": [],
         "todos": []
     },
     "message_range_summarized": {
         "from": 0,
-        "to": 2
+        "to": 0
     }
 }

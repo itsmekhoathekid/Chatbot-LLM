@@ -1,0 +1,22 @@
+vulcan exam test :
+    code : 75%
+    
+    flow 1 : Done 
+    debuggin - Done
+    structured output : Done
+
+
+    remaining tasks:
+        flow 2 : 
+            step 2 - context augmentation
+                take relavant fields from latest structured short-term memory 
+                N recent messages
+                
+            long term session memory
+                retrieve context from top K relevant short-term memory
+
+
+        documentation
+        .sh setup
+        video demo 
+

@@ -79,13 +79,25 @@ class ChatPipeline:
         session_id = self.context_length['lastest_summary_idx'] - 1  # insert the last summarized session
         pk = self.make_pk(user_id, chat_id, session_id)
 
+        key_facts = '. '.join(session_content)
+
+        vec = self.query_understanding.get_embedding(key_facts)
+
+        # vec đang là np.ndarray (1, dim) hoặc list
+        if hasattr(vec, "tolist"):
+            vec = vec.tolist()
+
+        # nếu còn nested [[...]] thì flatten về [...]
+        if isinstance(vec, list) and len(vec) == 1 and isinstance(vec[0], list):
+            vec = vec[0]
+
         data = {
             "pk": pk,
             "user_id": user_id,
             "chat_id": chat_id,
             "session_id": session_id,
-            "session_content": session_content,
-            "embedding": self.query_understanding.get_embedding(session_content).tolist()
+            "session_content": key_facts,
+            "embedding": vec
         }
 
         self.session_database.insert(data)
@@ -102,10 +114,10 @@ class ChatPipeline:
                 print("Exiting chat. Goodbye!", flush=True)
                 break
             
-            self.query_understanding.analyze_query(user_input)
+            query_understanding_result = await asyncio.to_thread(self.query_understanding.analyze_query, user_input, self.context_length["current_message_window"])
             
             # llm.chat sync -> chạy trong thread, vẫn await được
-            return_msg = await asyncio.to_thread(self.llm.chat, user_input)
+            return_msg = await asyncio.to_thread(self.llm.chat, query_understanding_result["rewritten_query"])
 
             all_tokens = return_msg["usage"].total_tokens
             self.context_length["current_context_length"] += all_tokens
@@ -123,6 +135,8 @@ class ChatPipeline:
                     self.context_length["current_message_window"],
                     self.context_length["lastest_summary_idx"],
                 )
+
+                print(summary)
 
                 await asyncio.to_thread(
                     self.insert_session_content,

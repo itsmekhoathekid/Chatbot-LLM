@@ -8,7 +8,7 @@ MAX_MESSAGE_LENGTH = 2048
 class Milvus:
     def __init__(self, config):
         self.config = config 
-        self.client = MilvusClient(host=config['uri'])
+        self.client = MilvusClient(uri=config['uri'])
         self.database = self.create_database(config["db_name"])
         self.create_collection()
     
@@ -66,7 +66,7 @@ class Milvus:
         self.client.create_collection(
             collection_name=self.config["collection_name"],
             schema=schema,
-            index_params=index_params if self.config["create_indexes_on_create"] else None,
+            index_params=index_params,
         )
         print(f"Collection '{self.config['collection_name']}' created.")
 
