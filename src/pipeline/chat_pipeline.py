@@ -2,6 +2,7 @@
 from src.llm.client import GroqClient
 from src.functions.session_summary import Summarization
 from src.functions.query_understanding import QueryUnderstanding
+from src.functions.database import Milvus 
 
 import json
 import os 
@@ -12,9 +13,12 @@ class ChatPipeline:
         self.config = config
         self.context_length = self.load_chat_history()
         self.llm = GroqClient(config=config)
-        
-
         self.session_summary = Summarization(self.llm, self.config)
+        self.session_database = Milvus(config)
+
+        self.query_understanding = QueryUnderstanding(self.llm, self.config, self.session_database)
+
+        
     
     def save_chat_history(self):
         if not self.config:
@@ -64,6 +68,28 @@ class ChatPipeline:
             "assistant": {"role": "assistant", "content": return_msg["content"]},
             "idx": len(self.context_length["all_messages"]),
         }
+    
+    def make_pk(self, user_id: str, chat_id: str, session_id: int) -> str:
+        return f"{user_id}::{chat_id}::{session_id}"
+    
+    
+    def insert_session_content(self, session_content: str):
+        user_id = self.config.get('user_id', 'default_user') if self.config else 'default_user'
+        chat_id = self.context_length['chat_id']
+        session_id = self.context_length['lastest_summary_idx'] - 1  # insert the last summarized session
+        pk = self.make_pk(user_id, chat_id, session_id)
+
+        data = {
+            "pk": pk,
+            "user_id": user_id,
+            "chat_id": chat_id,
+            "session_id": session_id,
+            "session_content": session_content,
+            "embedding": self.query_understanding.get_embedding(session_content).tolist()
+        }
+
+        self.session_database.insert(data)
+
 
     async def infinite_chat(self):
         print("Start chatting with the LLM (type 'exit' to quit)...", flush=True)
@@ -75,7 +101,9 @@ class ChatPipeline:
             if user_input.lower() in {"exit", "quit"}:
                 print("Exiting chat. Goodbye!", flush=True)
                 break
-
+            
+            self.query_understanding.analyze_query(user_input)
+            
             # llm.chat sync -> chạy trong thread, vẫn await được
             return_msg = await asyncio.to_thread(self.llm.chat, user_input)
 
@@ -95,6 +123,12 @@ class ChatPipeline:
                     self.context_length["current_message_window"],
                     self.context_length["lastest_summary_idx"],
                 )
+
+                await asyncio.to_thread(
+                    self.insert_session_content,
+                    summary["session_summary"]["key_facts"]
+                )
+
 
                 self.context_length["latest_summary"] = summary
                 self.context_length["lastest_summary_idx"] += 1

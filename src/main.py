@@ -33,7 +33,7 @@ def main():
     args = parse_args()
     config = load_config(args.config) if args.config else None
     pipe = ChatPipeline(config)
-    asyncio.run(pipe.infinite_chat())  # <-- change here
+    asyncio.run(pipe.infinite_chat())  
 
 if __name__ == "__main__":
     main()

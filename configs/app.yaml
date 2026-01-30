@@ -1,7 +1,27 @@
+# user info
+chat_id: "001"
+user_id: "user_123"
+
+# app_config:
 chat_history_path: "chatbot_logs/"
 reload: true 
-chat_id: "001"
 chatbot_temperature: 0.2
 max_completion_tokens: 500
 max_context_length: 500
-tokenizer_type: ""
+tokenizer_type: "" # if using custom tokenizer 
+
+# datgabase config 
+uri: "http://127.0.0.1:19530"
+token: ""
+db_name: "chatbot_db"
+collection_name: "chatbot_collection"
+embedding_dimension: 384
+index_type: "IVF_FLAT"
+metric_type: "COSINE"
+nlist: 128
+nprobe: 10
+topk: 5
+
+
+
+
