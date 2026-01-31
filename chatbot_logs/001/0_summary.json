@@ -3,16 +3,13 @@
         "session_id": "001",
         "summary_idx": 0,
         "user_profile": {
-            "constraints": [],
-            "prefs": []
+            "prefs": [],
+            "constraints": []
         },
         "key_facts": [
-            "Tokenization splits raw text into atomic units such as words, sub\u2011words, and punctuation",
-            "Part\u2011of\u2011Speech (POS) tagging assigns a grammatical category to each token",
-            "Morphological analysis/lemmatization reduces words to their base forms and captures inflectional features",
-            "Syntactic parsing builds a structural representation of sentence grammar as a parse tree or dependency graph",
-            "Classic NLP methods include rule\u2011based regex tokenizers, HMMs, Maximum Entropy models, Conditional Random Fields, PCFGs, and graph\u2011based parsers",
-            "Modern deep\u2011learning approaches use sub\u2011word tokenizers (BPE, WordPiece, SentencePiece) and transformer models such as BERT fine\u2011tuned for POS tagging, dependency parsing, and other tasks"
+            "User asked for an overview of Natural Language Processing (NLP) and received a concise summary covering core tasks, fundamental concepts, and evaluation metrics",
+            "Assistant clarified the type of knowledge provided, listing the NLP tasks and concepts included in the overview",
+            "User requested a curriculum vitae (CV) template and received a ready\u2011to\u2011use plain\u2011text/Markdown CV example with sections and filling guidance"
         ],
         "decisions": [],
         "open_questions": [],
@@ -20,6 +17,6 @@
     },
     "message_range_summarized": {
         "from": 0,
-        "to": 0
+        "to": 3
     }
 }

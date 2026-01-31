@@ -159,7 +159,7 @@ class QueryUnderstanding:
 
         # retrieve relevant context from session database
         
-        relevant_session = self.session_db.retrieve_relevant(embedding_rewritten_query, top_k=self.config['topk'])
+        relevant_session = self.session_db.retrieve_relevant_session_memory(embedding_rewritten_query, top_k=self.config['topk'])
         if relevant_session[0] != []:
             top1_session = relevant_session[0]
             full_session_json = _get(top1_session, "full_session_json", "{}")
@@ -177,7 +177,7 @@ class QueryUnderstanding:
             clarifying_questions = self.clarifying_questions_generation(rewritten_query)
         else:
             clarifying_questions = []
-
+        
 
         return {
             "original_query": query,

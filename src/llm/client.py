@@ -36,7 +36,7 @@ class GroqClient:
         return return_msg
     
     def query_understanding(self, messages: List[Dict[str, str]]) -> Dict[str, Any]: 
-        
+
         messages = Prompts.get_answer_generation_messages(messages)
         resp = self.client.chat.completions.create(
             model=self.config['model_name'] if self.config else "meta-llama/llama-4-scout-17b-16e-instruct",
@@ -72,7 +72,7 @@ class GroqClient:
                     model=model,
                     messages=messages,
                     response_format={"type": "json_schema", "json_schema": json_schema},
-                    temperature=0.0,
+                    temperature=self.config['chatbot_temperature'] if self.config else 0.0,
                     max_completion_tokens=self.config.get("max_completion_tokens", 256) if self.config else 256,
                 )
 
@@ -100,7 +100,7 @@ class GroqClient:
                     "content": "Output JSON object only."
                 }],
                 response_format={"type": "json_object"},
-                temperature=0.0,
+                temperature=self.config['chatbot_temperature'] if self.config else 0.0,
                 max_completion_tokens=self.config.get("max_completion_tokens", 256) if self.config else 256,
             )
             raw = completion.choices[0].message.content

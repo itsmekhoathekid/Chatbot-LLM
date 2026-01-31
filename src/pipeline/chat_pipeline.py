@@ -1,4 +1,5 @@
 # src/pipeline/chat_pipeline.py
+import time
 from src.llm.client import GroqClient
 from src.functions.session_summary import Summarization
 from src.functions.query_understanding import QueryUnderstanding
@@ -11,12 +12,13 @@ import asyncio
 class ChatPipeline:
     def __init__(self, config: dict = None):
         self.config = config
-        self.context_length = self.load_chat_history()
         self.llm = GroqClient(config=config)
-        self.session_summary = Summarization(self.llm, self.config)
         self.session_database = Milvus(config)
-
+        self.context_length = self._load_state_from_db()
+        self.session_summary = Summarization(self.llm, self.config)
         self.query_understanding = QueryUnderstanding(self.llm, self.config, self.session_database)
+
+        # Load from Milvus
 
         
     
@@ -101,7 +103,134 @@ class ChatPipeline:
             "full_session_json": json.dumps(full_session_json)
         }
 
-        self.session_database.insert(data)
+        self.session_database.insert(collection_name=self.config["session_collection_name"], data=data)
+    
+        
+
+    def insert_chat_log(self, user_id: str, chat_id: str, idx: int, role: str, content: str):
+        name = self.config["chat_logs_collection_name"]
+        pk = f"{user_id}::{chat_id}::{idx}::{role}"
+        row = {
+            "pk": pk,
+            "user_id": user_id,
+            "chat_id": chat_id,
+            "idx": int(idx),
+            "role": role,
+            "content": content,
+            "created_at": int(time.time()),
+        }
+        return self.session_database.insert(collection_name=name, data=row)
+    
+    
+    
+
+    def load_chat_logs(self, user_id: str, chat_id: str, limit: int = 200):
+        name = self.config["chat_logs_collection_name"]
+        expr = f'user_id == "{user_id}" and chat_id == "{chat_id}"'
+        # self.session_database.ensure_loaded(name)
+        rows = self.session_database.client.query(
+            collection_name=name,
+            filter=expr,
+            output_fields=["idx", "role", "content", "created_at"],
+            limit=limit,
+        )
+        # sort by idx just in case
+        rows.sort(key=lambda r: r["idx"])
+        return rows
+    
+
+    def save_context_window_state(
+        self,
+        user_id: str,
+        chat_id: str,
+        current_context_length: int,
+        lastest_summary_idx: int,
+        window_obj: dict,
+        latest_summary_obj: dict | None = None,
+    ):
+        name = self.config["context_window_collection_name"]
+        pk = f"{user_id}::{chat_id}"
+
+        
+
+        row = {
+            "pk": pk,
+            "user_id": user_id,
+            "chat_id": chat_id,
+            "current_context_length": int(current_context_length),
+            "lastest_summary_idx": int(lastest_summary_idx),
+            "window_json": json.dumps(window_obj, ensure_ascii=False),
+            "latest_summary_json": json.dumps(latest_summary_obj, ensure_ascii=False) if latest_summary_obj else "{}",
+        }
+        return self.session_database.insert(collection_name=name, data=row)
+
+    def load_context_window_state(self, user_id: str, chat_id: str) -> dict | None:
+        name = self.config["context_window_collection_name"]
+        self.session_database.ensure_loaded(name)
+        pk = f"{user_id}::{chat_id}"
+        rows = self.session_database.client.query(
+            collection_name=name,
+            filter=f'pk == "{pk}"',
+            output_fields=[
+                "current_context_length", "lastest_summary_idx", "window_json", "latest_summary_json"
+        ])
+
+        # "current_context_length", "lastest_summary_idx", "window_json", "latest_summary_json"
+        
+        if not rows:
+            return None
+        r = rows[0]
+        return {
+            "current_context_length": int(r.get("current_context_length", 0)),
+            "lastest_summary_idx": int(r.get("lastest_summary_idx", 0)),
+            "current_message_window": json.loads(r.get("window_json", "[]") or "[]"),
+            "latest_summary": json.loads(r.get("latest_summary_json", "{}") or "{}"),
+        }
+
+    def _default_state(self):
+        return {
+            "chat_id": self.config.get("chat_id", "default_chat") if self.config else "default_chat",
+            "current_context_length": 0,
+            "max_context_length": self.config.get("max_context_length", 2048) if self.config else 2048,
+            "current_chat_id": self.config.get("chat_id", "default_chat") if self.config else "default_chat",
+            "current_message_window": [],
+            "all_messages": [],
+            "lastest_summary_idx": 0,
+            "latest_summary": None,
+            "logs": [],
+        }
+
+    def _load_state_from_db(self):
+        default_state = self._default_state()
+
+        if not self.config:
+            return default_state
+
+        user_id = self.config.get("user_id", "default_user")
+        chat_id = self.config.get("chat_id", "default_chat")
+
+        state = self.load_context_window_state(user_id, chat_id)
+
+        # ✅ nếu chưa có state trong DB -> return default (KHÔNG return None)
+        if not state:
+            return default_state
+
+        # merge
+        default_state["current_context_length"] = state.get("current_context_length", 0)
+        default_state["lastest_summary_idx"] = state.get("lastest_summary_idx", 0)
+        default_state["current_message_window"] = state.get("current_message_window", [])
+        default_state["latest_summary"] = state.get("latest_summary", None)
+
+        # load logs (optional)
+        try:
+            default_state["logs"] = self.load_chat_logs(user_id, chat_id, limit=500)
+        except Exception:
+            default_state["logs"] = []
+
+        return default_state
+
+
+
 
 
     async def infinite_chat(self):
@@ -125,8 +254,43 @@ class ChatPipeline:
             self.context_length["current_context_length"] += all_tokens
 
             msg_obj = self.chat_formation(user_input, return_msg)
+
+            # fall back insert chat logs
             self.context_length["current_message_window"].append(msg_obj)
             self.context_length["all_messages"].append(msg_obj)
+
+            # insert chat log into Milvus
+            user_id = self.config.get("user_id", "default_user")
+            chat_id = self.context_length["chat_id"]
+            idx = msg_obj["idx"]
+            await asyncio.to_thread(
+                self.insert_chat_log,
+                user_id,
+                chat_id,
+                idx,
+                "user",
+                user_input
+            )
+            await asyncio.to_thread(
+                self.insert_chat_log,
+                user_id,
+                chat_id,
+                idx,
+                "assistant",
+                return_msg["content"]
+            )
+
+            # save context window state into Milvus
+            await asyncio.to_thread(
+                self.save_context_window_state,
+                user_id,
+                chat_id,
+                self.context_length["current_context_length"],
+                self.context_length["lastest_summary_idx"],
+                self.context_length["current_message_window"],
+                self.context_length["latest_summary"],
+            )
+
 
             if self.context_length["current_context_length"] > self.context_length["max_context_length"]:
                 print(f"Context length exceeded maximum limit. [{self.context_length['current_context_length']}/{self.context_length['max_context_length']}] Generating summary...", flush=True)
@@ -137,8 +301,6 @@ class ChatPipeline:
                     self.context_length["current_message_window"],
                     self.context_length["lastest_summary_idx"],
                 )
-
-                print(summary)
 
                 await asyncio.to_thread(
                     self.insert_session_content,

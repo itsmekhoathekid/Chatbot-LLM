@@ -3,14 +3,14 @@ SESSION_SUMMARY_CONTENT_SCHEMA = {
   "strict": True,
   "schema": {
     "type": "object",
-    "additionalProperties": False,   # ✅ root object
+    "additionalProperties": False,   
     "properties": {
       "user_profile": {
         "type": "object",
-        "additionalProperties": False,  # ✅ nested object MUST have this
+        "additionalProperties": False,  
         "properties": {
           "prefs": {"type":"array","items":{"type":"string"}, "description":"Stable user preferences about response style/format/language."},
-          "constraints": {"type":"array","items":{"type":"string"}, "description":"Hard requirements/limits (CPU-only, must use Groq, max tokens...)."}
+          "constraints": {"type":"array","items":{"type":"string"}, "description":"Condition of the user, limitations, restrictions."}
         },
         "required": ["prefs", "constraints"]
       },
@@ -68,7 +68,8 @@ REWRITTEN_QUERY_SCHEMA = {
   }
 }
 
-# src/llm/schemas.py
+# src/llm/schemas.py\
+
 AMBIGUOUS_BOOL_SCHEMA = {
   "name": "ambiguous_bool",
   "strict": True,
