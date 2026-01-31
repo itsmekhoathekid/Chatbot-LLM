@@ -4,6 +4,7 @@ from pymilvus import MilvusClient, DataType, Collection , connections
 MAX_USER_ID_LENGTH = 512
 MAX_CHAT_ID_LENGTH = 512
 MAX_MESSAGE_LENGTH = 2048
+MAX_SESSION_JSON_LENGTH = 8192
 
 class Milvus:
     def __init__(self, config):
@@ -31,7 +32,7 @@ class Milvus:
             data=query_embedding,
             limit=top_k,
             search_params=search_params,
-            output_fields=["user_id", "chat_id", "session_content"]
+            output_fields=["user_id", "chat_id", "session_content", "full_session_json"]
         )
         return results
 
@@ -50,7 +51,8 @@ class Milvus:
         schema.add_field("chat_id", DataType.VARCHAR, max_length=MAX_CHAT_ID_LENGTH)
         schema.add_field("session_id", DataType.INT64)
         schema.add_field("session_content", DataType.VARCHAR, max_length=MAX_MESSAGE_LENGTH)
-
+        schema.add_field("full_session_json", DataType.VARCHAR, max_length=MAX_SESSION_JSON_LENGTH)
+        
         # vector field
         schema.add_field("embedding", DataType.FLOAT_VECTOR, dim=self.config['embedding_dimension'])
         # 2) index 

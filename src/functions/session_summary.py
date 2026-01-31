@@ -28,12 +28,12 @@ class Summarization:
         content = self.llm.chat_structured(messages, SESSION_SUMMARY_CONTENT_SCHEMA)
 
         result = {
-        "session_summary": {
-            "session_id": self.chat_id,
-            "summary_idx": summary_idx,
-            **content
-        },
-        "message_range_summarized": {"from": start_idx, "to": end_idx}
+            "session_summary": {
+                "session_id": self.chat_id,
+                "summary_idx": summary_idx,
+                **content
+            },
+            "message_range_summarized": {"from": start_idx, "to": end_idx}
         }
 
         self._save(result, summary_idx)

@@ -9,21 +9,64 @@ SESSION_SUMMARY_CONTENT_SCHEMA = {
         "type": "object",
         "additionalProperties": False,  # ✅ nested object MUST have this
         "properties": {
-          "prefs": {"type": "array", "items": {"type": "string"}},
-          "constraints": {"type": "array", "items": {"type": "string"}}
+          "prefs": {"type":"array","items":{"type":"string"}, "description":"Stable user preferences about response style/format/language."},
+          "constraints": {"type":"array","items":{"type":"string"}, "description":"Hard requirements/limits (CPU-only, must use Groq, max tokens...)."}
         },
         "required": ["prefs", "constraints"]
       },
-      "key_facts": {"type": "array", "items": {"type": "string"}},
-      "decisions": {"type": "array", "items": {"type": "string"}},
-      "open_questions": {"type": "array", "items": {"type": "string"}},
-      "todos": {"type": "array", "items": {"type": "string"}}
+      "key_facts": {"type": "array", "items": {"type": "string"}, "description":"Important factual statements from the conversation, what user asked about, what information did you give him"},
+      "decisions": {"type": "array", "items": {"type": "string"}, "description":"Explicit decisions or choices made."},
+      "open_questions": {"type": "array", "items": {"type": "string"}, "description":"Unresolved questions asked or implied by the user."},
+      "todos": {"type": "array", "items": {"type": "string"}, "description":"Actionable tasks explicitly requested or implied."}
     },
     "required": ["user_profile", "key_facts", "decisions", "open_questions", "todos"]
   }
 }
 
 
+CLARIFYING_QUESTIONS_SCHEMA = {
+  "name": "clarifying_questions",
+  "strict": True,
+  "schema": {
+    "type": "object",
+    "additionalProperties": False,
+    "properties": {
+      "questions": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "additionalProperties": False,
+          "properties": {
+            "question": {"type": "string"},
+            "type": {
+              "type": "string",
+              "enum": ["scope", "constraints", "context", "goal", "format"]
+            }
+          },
+          "required": ["question", "type"]
+        }
+      }
+    },
+    "required": ["questions"]
+  }
+}
+
+
+REWRITTEN_QUERY_SCHEMA = {
+  "name": "rewritten_query",
+  "strict": True,
+  "schema": {
+    "type": "object",
+    "additionalProperties": False,
+    "properties": {
+      "rewritten_query": {
+        "type": "string",
+        "description": "A clearer and more specific version of the original query."
+      }
+    },
+    "required": ["rewritten_query"]
+  }
+}
 
 # src/llm/schemas.py
 AMBIGUOUS_BOOL_SCHEMA = {
@@ -41,7 +84,18 @@ AMBIGUOUS_BOOL_SCHEMA = {
 
 
 
-from pydantic import BaseModel
-
-class AmbiguousResult(BaseModel):
-    is_ambiguous: bool
+REWRITTEN_QUERY_SCHEMA = {
+  "name": "rewritten_query",
+  "strict": True,
+  "schema": {
+    "type": "object",
+    "additionalProperties": False,
+    "properties": {
+      "rewritten_query": {
+        "type": "string",
+        "description": "A clearer and more specific version of the original query."
+      }
+    },
+    "required": ["rewritten_query"]
+  }
+}

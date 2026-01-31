@@ -17,13 +17,30 @@ class GroqClient:
         self.config = config
         self.max_retries = self.config.get("groq_max_retries", 3) if self.config else 2
 
-    def chat(self, user_text: str, model: str = "meta-llama/llama-4-scout-17b-16e-instruct") -> str:
+    def chat(self, user_text: str) -> str:
         resp = self.client.chat.completions.create(
-            model=self.config['model_name'] if self.config else model,
+            model=self.config['model_name'] if self.config else "meta-llama/llama-4-scout-17b-16e-instruct",
             messages=[
                 {"role": "system", "content": Prompts.SYSTEM},
                 {"role": "user", "content": user_text},
             ],
+            temperature=self.config['chatbot_temperature'] if self.config else 0.7,
+            max_completion_tokens=self.config['max_completion_tokens'] if self.config else 512,
+        )
+
+        return_msg = {
+            "role": resp.choices[0].message.role,
+            "content": resp.choices[0].message.content,
+            "usage": resp.usage,
+        }
+        return return_msg
+    
+    def query_understanding(self, messages: List[Dict[str, str]]) -> Dict[str, Any]: 
+        
+        messages = Prompts.get_answer_generation_messages(messages)
+        resp = self.client.chat.completions.create(
+            model=self.config['model_name'] if self.config else "meta-llama/llama-4-scout-17b-16e-instruct",
+            messages=messages,
             temperature=self.config['chatbot_temperature'] if self.config else 0.7,
             max_completion_tokens=self.config['max_completion_tokens'] if self.config else 512,
         )

@@ -1,0 +1,22 @@
+{
+    "session_summary": {
+        "session_id": "001",
+        "summary_idx": 2,
+        "user_profile": {
+            "constraints": [],
+            "prefs": []
+        },
+        "key_facts": [
+            "The user requested information about Natural Language Processing (NLP).",
+            "The assistant provided an overview of core NLP tasks, including tokenization, part\u2011of\u2011speech (POS) tagging, morphological analysis/lemmatization, syntactic parsing (constituency and dependency), named\u2011entity recognition (NER), and coreference resolution.",
+            "For each task the assistant listed typical inputs, typical outputs, and common evaluation metrics such as accuracy, F1, LAS/UAS, and precision/recall."
+        ],
+        "decisions": [],
+        "open_questions": [],
+        "todos": []
+    },
+    "message_range_summarized": {
+        "from": 3,
+        "to": 4
+    }
+}

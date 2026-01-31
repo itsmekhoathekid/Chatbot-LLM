@@ -1,0 +1,21 @@
+{
+    "session_summary": {
+        "session_id": "001",
+        "summary_idx": 4,
+        "user_profile": {
+            "prefs": [],
+            "constraints": []
+        },
+        "key_facts": [
+            "User typed \"exit\" indicating desire to end the chat.",
+            "User greeted with \"yo bro\" twice."
+        ],
+        "decisions": [],
+        "open_questions": [],
+        "todos": []
+    },
+    "message_range_summarized": {
+        "from": 7,
+        "to": 9
+    }
+}

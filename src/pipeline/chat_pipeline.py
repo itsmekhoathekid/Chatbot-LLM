@@ -73,7 +73,7 @@ class ChatPipeline:
         return f"{user_id}::{chat_id}::{session_id}"
     
     
-    def insert_session_content(self, session_content: str):
+    def insert_session_content(self, session_content: str, full_session_json: dict = None):
         user_id = self.config.get('user_id', 'default_user') if self.config else 'default_user'
         chat_id = self.context_length['chat_id']
         session_id = self.context_length['lastest_summary_idx'] - 1  # insert the last summarized session
@@ -97,7 +97,8 @@ class ChatPipeline:
             "chat_id": chat_id,
             "session_id": session_id,
             "session_content": key_facts,
-            "embedding": vec
+            "embedding": vec,
+            "full_session_json": json.dumps(full_session_json)
         }
 
         self.session_database.insert(data)
@@ -117,9 +118,10 @@ class ChatPipeline:
             query_understanding_result = await asyncio.to_thread(self.query_understanding.analyze_query, user_input, self.context_length["current_message_window"])
             
             # llm.chat sync -> chạy trong thread, vẫn await được
-            return_msg = await asyncio.to_thread(self.llm.chat, query_understanding_result["rewritten_query"])
+            return_msg = await asyncio.to_thread(self.llm.query_understanding, query_understanding_result)
 
-            all_tokens = return_msg["usage"].total_tokens
+            all_tokens = return_msg["usage"].completion_tokens + len(query_understanding_result["rewritten_query"].split()) 
+
             self.context_length["current_context_length"] += all_tokens
 
             msg_obj = self.chat_formation(user_input, return_msg)
@@ -140,7 +142,8 @@ class ChatPipeline:
 
                 await asyncio.to_thread(
                     self.insert_session_content,
-                    summary["session_summary"]["key_facts"]
+                    summary["session_summary"]["key_facts"],
+                    summary
                 )
 
 

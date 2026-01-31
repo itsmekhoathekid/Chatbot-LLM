@@ -8,14 +8,14 @@ chat_history_path: "chatbot_logs/"
 reload: true 
 chatbot_temperature: 0.0
 max_completion_tokens: 500
-max_context_length: 500
+max_context_length: 2000
 tokenizer_type: "" # if using custom tokenizer 
 
 # datgabase config 
 uri: "http://localhost:19530"
 token: ""
 db_name: "chatbot_db"
-collection_name: "chatbot_collection"
+collection_name: "chatbot"
 embedding_dimension: 384
 index_type: "IVF_FLAT"
 metric_type: "COSINE"

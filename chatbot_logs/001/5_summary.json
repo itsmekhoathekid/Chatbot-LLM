@@ -1,0 +1,27 @@
+{
+    "session_summary": {
+        "session_id": "001",
+        "summary_idx": 5,
+        "user_profile": {
+            "prefs": [],
+            "constraints": []
+        },
+        "key_facts": [
+            "Natural Language Processing (NLP) is a sub\u2011field of AI that enables computers to understand, interpret, and generate human language.",
+            "NLP combines linguistics, computer science, and machine learning.",
+            "Tokenization splits text into words, subwords, or sentences.",
+            "Part\u2011of\u2011Speech (POS) tagging labels each token with its grammatical role.",
+            "Named Entity Recognition (NER) identifies proper nouns such as people, places, organizations, and dates.",
+            "Sentiment Analysis determines the emotional tone of text as positive, negative, or neutral.",
+            "Dependency Parsing maps grammatical relationships between words.",
+            "Machine Translation translates text from one language to another."
+        ],
+        "decisions": [],
+        "open_questions": [],
+        "todos": []
+    },
+    "message_range_summarized": {
+        "from": 10,
+        "to": 11
+    }
+}

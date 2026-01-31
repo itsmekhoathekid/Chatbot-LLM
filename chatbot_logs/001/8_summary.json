@@ -1,0 +1,22 @@
+{
+    "session_summary": {
+        "session_id": "001",
+        "summary_idx": 8,
+        "user_profile": {
+            "prefs": [],
+            "constraints": []
+        },
+        "key_facts": [
+            "User repeatedly greeted with \"yo bro\".",
+            "User asked for \"nlp stuff\".",
+            "Assistant responded with a cheat\u2011sheet listing core NLP techniques (e.g., tokenization, POS tagging, NER, sentiment analysis, dependency parsing, machine translation, topic modeling/embeddings) and popular toolkits/libraries such as NLTK, spaCy, Stanford CoreNLP, Hugging\u202fFace, Gensim, FastText, etc."
+        ],
+        "decisions": [],
+        "open_questions": [],
+        "todos": []
+    },
+    "message_range_summarized": {
+        "from": 18,
+        "to": 22
+    }
+}
