@@ -9,14 +9,13 @@ reload: true
 chatbot_temperature: 0.2
 max_completion_tokens: 500
 max_context_length: 1000
-tokenizer_type: "" # if using custom tokenizer 
 
 # datgabase config 
 uri: "http://localhost:19530"
 token: ""
 db_name: "chatbot_db"
 session_collection_name: "session_memoryy"
-chat_logs_collection_name: "chat_logss"
+chat_logs_collection_name: "chat_logss" 
 context_window_collection_name: "context_windoww"
 
 embedding_dimension: 384

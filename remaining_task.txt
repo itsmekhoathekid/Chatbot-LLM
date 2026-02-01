@@ -16,7 +16,7 @@ vulcan exam test :
             long term session memory
                 retrieve context from top K relevant short-term memory
                 -> yeah its good 
-
+        
         documentation
         .sh setup
         video demo 

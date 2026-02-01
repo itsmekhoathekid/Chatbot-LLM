@@ -36,6 +36,9 @@ class Summarization:
             "message_range_summarized": {"from": start_idx, "to": end_idx}
         }
 
+        print(f"Generated session summary for messages {start_idx} to {end_idx}")
+        print(json.dumps(result, indent=4))
+        
         self._save(result, summary_idx)
         return result
 
