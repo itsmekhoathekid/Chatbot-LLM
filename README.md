@@ -3,7 +3,8 @@
 
 ## Demo
 
-🎥 **Video Demo (Don't worry, i deleted the API key :3)**: [_Click here_](https://drive.google.com/file/d/1L5SI_t9X-eY8Vvcsb2zcjXdL5SpYurcu/view?usp=sharing)
+🎥 **Video Demo (Don't worry, I deleted the API key :3)**:  
+[Click here](https://drive.google.com/file/d/1L5SI_t9X-eY8Vvcsb2zcjXdL5SpYurcu/view?usp=sharing)
 
 A modular, memory-augmented chatbot system built with LLMs, structured outputs, and a vector database for long-term conversational context.
 
@@ -83,6 +84,47 @@ python -m src.main --config ./configs/app.yaml
 
 ---
 
+## Structured Output Examples
+
+### Query Understanding Pipeline
+
+```json
+{
+  "original_query": "...",
+  "is_ambiguous": true,
+  "rewritten_query": "...",
+  "needed_context_from_memory": [
+    "user_profile.prefs",
+    "open_questions"
+  ],
+  "clarifying_questions": [],
+  "final_augmented_context": {}
+}
+```
+
+### Session Memorization
+
+```json
+{
+  "session_summary": {
+    "user_profile": {
+      "prefs": [],
+      "constraints": []
+    },
+    "key_facts": [],
+    "decisions": [],
+    "open_questions": [],
+    "todos": []
+  },
+  "message_range_summarized": {
+    "from": 0,
+    "to": 42
+  }
+}
+```
+
+---
+
 ## Key Design Assumptions
 
 - The chatbot enforces **structured LLM outputs** via JSON Schema
@@ -133,11 +175,11 @@ nprobe: 10
 topk: 5
 ```
 
-
+---
 
 ## References
 
 - Groq API Keys: https://console.groq.com/keys  
 - Milvus Quickstart: https://milvus.io/docs/quickstart.md  
 - RAG Context Refinement Agent: https://devpost.com/software/rag-context-refinement-agent  
-- LangChain Groq Integration: https://github.com/langchain-ai/langchain/tree/master/libs/partners/groq  
+- LangChain Groq Integration: https://github.com/langchain-ai/langchain/tree/master/libs/partners/groq
