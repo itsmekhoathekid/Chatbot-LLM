@@ -321,6 +321,7 @@ class ChatPipeline:
                 f"[Context Length: {self.context_length['current_context_length']}/{self.context_length['max_context_length']}]",
                 flush=True
             )
+            
 
         self.save_chat_history()
 

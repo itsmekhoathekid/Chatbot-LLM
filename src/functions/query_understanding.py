@@ -154,6 +154,7 @@ class QueryUnderstanding:
             is_ambiguous = False
             rewritten_query = query
         
+        print("Rewritten query:", rewritten_query, flush = True)
         embedding_rewritten_query = self.get_embedding(rewritten_query)
 
 
@@ -178,8 +179,7 @@ class QueryUnderstanding:
         else:
             clarifying_questions = []
         
-
-        return {
+        msg = {
             "original_query": query,
             "is_ambiguous": is_ambiguous,
             "rewritten_query": rewritten_query,
@@ -188,6 +188,10 @@ class QueryUnderstanding:
             "clarifying_questions": clarifying_questions,
             "final_augmented_context": final_augmented_context
         }
+
+        print("Analyzed query info:", msg, flush=True)
+        
+        return msg
 
     def get_embedding(self, text: str):
         embedding = self.embedding.encode([text])

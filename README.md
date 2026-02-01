@@ -1,6 +1,10 @@
 # Chatbot-LLM
 **Vulcan Lab – Entrance Exam Project**
 
+## Demo
+
+🎥 **Video Demo**: [_Click here_](https://drive.google.com/file/d/1L5SI_t9X-eY8Vvcsb2zcjXdL5SpYurcu/view?usp=sharing)
+
 A modular, memory-augmented chatbot system built with LLMs, structured outputs, and a vector database for long-term conversational context.
 
 ---
@@ -129,13 +133,7 @@ nprobe: 10
 topk: 5
 ```
 
----
 
-## Demo
-
-🎥 **Video Demo**: _To be updated_
-
----
 
 ## References
 

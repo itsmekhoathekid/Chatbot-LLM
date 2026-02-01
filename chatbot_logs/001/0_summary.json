@@ -7,9 +7,10 @@
             "constraints": []
         },
         "key_facts": [
-            "User asked for an overview of Natural Language Processing (NLP) and received a concise summary covering core tasks, fundamental concepts, and evaluation metrics",
-            "Assistant clarified the type of knowledge provided, listing the NLP tasks and concepts included in the overview",
-            "User requested a curriculum vitae (CV) template and received a ready\u2011to\u2011use plain\u2011text/Markdown CV example with sections and filling guidance"
+            "User requested an overview of Natural Language Processing (NLP).",
+            "Assistant provided a concise overview of core NLP tasks and common techniques/models.",
+            "User requested an overview of Computer Vision (CV).",
+            "Assistant provided a structured overview of core CV problem categories and fundamental techniques."
         ],
         "decisions": [],
         "open_questions": [],
@@ -17,6 +18,6 @@
     },
     "message_range_summarized": {
         "from": 0,
-        "to": 3
+        "to": 2
     }
 }
